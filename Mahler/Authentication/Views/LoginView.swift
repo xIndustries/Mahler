@@ -8,14 +8,14 @@ struct LoginView: View {
             if viewModel.isAuthenticated {
                 DashboardView()  // ✅ No duplicate ViewModel instances
             } else {
-                Text("Please log in to continue.")
+                Text("Project Mahler")
                     .font(.headline)
                     .padding()
 
                 Button(action: {
                     viewModel.login()
                 }) {
-                    Text("Login with Auth0")
+                    Text("Login / Signup")
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
