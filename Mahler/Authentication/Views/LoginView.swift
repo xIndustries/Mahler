@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var viewModel: AuthViewModel  // ✅ Now receives updates
+    @EnvironmentObject var viewModel: AuthViewModel  // ✅ Uses shared instance
 
     var body: some View {
         VStack(spacing: 20) {
             if viewModel.isAuthenticated {
-                DashboardView(viewModel: viewModel)  // ✅ Route to Dashboard with correct instance
+                DashboardView()  // ✅ No duplicate ViewModel instances
             } else {
                 Text("Please log in to continue.")
                     .font(.headline)
@@ -28,7 +28,8 @@ struct LoginView: View {
     }
 }
 
-// ✅ Fix Preview to Pass a Mock ViewModel
+// ✅ Fix Preview to Use EnvironmentObject
 #Preview {
-    LoginView(viewModel: AuthViewModel())
+    LoginView()
+        .environmentObject(AuthViewModel())
 }

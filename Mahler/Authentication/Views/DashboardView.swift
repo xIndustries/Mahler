@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @ObservedObject var viewModel: AuthViewModel  // Use @ObservedObject to receive updates
+    @EnvironmentObject var viewModel: AuthViewModel  // ✅ Use global instance
 
     var body: some View {
         VStack {
@@ -26,11 +26,16 @@ struct DashboardView: View {
         }
         .padding()
         .onAppear {
-            print("🔹 Dashboard Loaded | User Email: \(viewModel.session?.email ?? "No email")")
+            if !viewModel.hasAppeared {
+                print("🔹 Dashboard Loaded | User Email: \(viewModel.session?.email ?? "No email")")
+                viewModel.hasAppeared = true  // ✅ Prevent multiple logs
+            }
         }
     }
 }
 
+// ✅ Fix Preview to Use EnvironmentObject
 #Preview {
-    DashboardView(viewModel: AuthViewModel())
+    DashboardView()
+        .environmentObject(AuthViewModel())
 }

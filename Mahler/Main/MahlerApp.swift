@@ -2,15 +2,12 @@ import SwiftUI
 
 @main
 struct MahlerApp: App {
-    @StateObject private var viewModel = AuthViewModel() // ✅ Ensure this instance is shared
+    @StateObject private var viewModel = AuthViewModel()  // ✅ Shared instance
 
     var body: some Scene {
         WindowGroup {
-            if viewModel.isAuthenticated {
-                DashboardView(viewModel: viewModel)  // ✅ Pass same instance
-            } else {
-                LoginView(viewModel: viewModel)  // ✅ Pass same instance
-            }
+            ContentView()
+                .environmentObject(viewModel)  // ✅ Inject globally
         }
     }
 }
