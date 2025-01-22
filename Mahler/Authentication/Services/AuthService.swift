@@ -31,6 +31,20 @@ class AuthService {
                             email: userInfo.email // ✅ Store email
                         )
                         self.currentSession = session
+
+                        // 🔥 Call gRPC to store the user in PostgreSQL
+                        GRPCNetworkManager.shared.createUser(
+                            auth0ID: userInfo.userId,
+                            email: userInfo.email ?? "",
+                            username: nil
+                        ) { success, error in
+                            if success {
+                                print("✅ User stored in backend")
+                            } else {
+                                print("❌ Error storing user: \(error ?? "Unknown error")")
+                            }
+                        }
+
                         completion(.success(session))
                     } else {
                         print("❌ Failed to decode JWT")
