@@ -15,9 +15,13 @@ class AuthService {
             .start { result in
                 switch result {
                 case .success(let credentials):
+                    // ✅ Print JWT Tokens to Xcode Terminal
+                    print("🔹 Access Token: \(credentials.accessToken)")
+                    print("🔹 ID Token (JWT): \(credentials.idToken)")
+
                     if let userInfo = self.decodeJWT(credentials.idToken) {
-                        print("User ID: \(userInfo.userId)")
-                        print("Email: \(userInfo.email ?? "No email")")
+                        print("✅ User ID: \(userInfo.userId)")
+                        print("✅ Email: \(userInfo.email ?? "No email")")
 
                         let session = AuthSession(
                             accessToken: credentials.accessToken,
@@ -29,9 +33,11 @@ class AuthService {
                         self.currentSession = session
                         completion(.success(session))
                     } else {
+                        print("❌ Failed to decode JWT")
                         completion(.failure(NSError(domain: "AuthService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode ID Token"])))
                     }
                 case .failure(let error):
+                    print("❌ Login Failed: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }
@@ -42,6 +48,7 @@ class AuthService {
             .webAuth(clientId: clientId, domain: domain)
             .clearSession { result in
                 self.currentSession = nil
+                print("✅ Logged out successfully!")
                 completion()
             }
     }
@@ -67,7 +74,7 @@ class AuthService {
                 return (userId, email)
             }
         } catch {
-            print("Failed to decode JWT: \(error.localizedDescription)")
+            print("❌ Failed to decode JWT: \(error.localizedDescription)")
         }
         return nil
     }
