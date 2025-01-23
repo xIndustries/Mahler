@@ -15,7 +15,6 @@ class AuthService {
             .start { result in
                 switch result {
                 case .success(let credentials):
-                    // ✅ Print JWT Tokens to Xcode Terminal
                     print("🔹 Access Token: \(credentials.accessToken)")
                     print("🔹 ID Token (JWT): \(credentials.idToken)")
 
@@ -27,21 +26,29 @@ class AuthService {
                             accessToken: credentials.accessToken,
                             idToken: credentials.idToken,
                             refreshToken: credentials.refreshToken,
-                            userName: userInfo.email,
-                            email: userInfo.email // ✅ Store email
+                            userName: nil,
+                            email: userInfo.email,
+                            userID: userInfo.userId  // ✅ Store userID
                         )
                         self.currentSession = session
 
-                        // 🔥 Call gRPC to store the user in PostgreSQL
-                        GRPCNetworkManager.shared.createUser(
-                            auth0ID: userInfo.userId,
-                            email: userInfo.email ?? "",
-                            username: nil
-                        ) { success, error in
-                            if success {
-                                print("✅ User stored in backend")
+                        // 🔹 Check if user exists before creating a new one
+                        GRPCNetworkManager.shared.getUser(auth0ID: userInfo.userId) { user, error in
+                            if let user = user {
+                                print("✅ User exists in backend, skipping creation")
                             } else {
-                                print("❌ Error storing user: \(error ?? "Unknown error")")
+                                print("🔹 User does not exist, creating new user")
+                                GRPCNetworkManager.shared.createUser(
+                                    auth0ID: userInfo.userId,
+                                    email: userInfo.email ?? "",
+                                    username: nil
+                                ) { success, error in
+                                    if success {
+                                        print("✅ New user stored in backend")
+                                    } else {
+                                        print("❌ Error storing user: \(error ?? "Unknown error")")
+                                    }
+                                }
                             }
                         }
 
@@ -71,7 +78,6 @@ class AuthService {
         return currentSession
     }
 
-    // ✅ Decode JWT Token to extract user email
     private func decodeJWT(_ token: String) -> (userId: String, email: String?)? {
         let parts = token.split(separator: ".")
         guard parts.count == 3 else { return nil }

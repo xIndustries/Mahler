@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		17CF23D62D3F253800E45B88 /* Auth0 in Frameworks */ = {isa = PBXBuildFile; productRef = 17CF23D52D3F253800E45B88 /* Auth0 */; };
 		17CF23F62D3FCA3700E45B88 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 17CF23F52D3FCA3700E45B88 /* JWTDecode */; };
+		17CF240C2D40CEC500E45B88 /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = 17CF240B2D40CEC500E45B88 /* CGRPCZlib */; };
+		17CF240E2D40CEC500E45B88 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = 17CF240D2D40CEC500E45B88 /* GRPC */; };
+		17CF24102D40CEC500E45B88 /* GRPCReflectionService in Frameworks */ = {isa = PBXBuildFile; productRef = 17CF240F2D40CEC500E45B88 /* GRPCReflectionService */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +31,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17CF24102D40CEC500E45B88 /* GRPCReflectionService in Frameworks */,
+				17CF240E2D40CEC500E45B88 /* GRPC in Frameworks */,
 				17CF23F62D3FCA3700E45B88 /* JWTDecode in Frameworks */,
 				17CF23D62D3F253800E45B88 /* Auth0 in Frameworks */,
+				17CF240C2D40CEC500E45B88 /* CGRPCZlib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +80,9 @@
 			packageProductDependencies = (
 				17CF23D52D3F253800E45B88 /* Auth0 */,
 				17CF23F52D3FCA3700E45B88 /* JWTDecode */,
+				17CF240B2D40CEC500E45B88 /* CGRPCZlib */,
+				17CF240D2D40CEC500E45B88 /* GRPC */,
+				17CF240F2D40CEC500E45B88 /* GRPCReflectionService */,
 			);
 			productName = Mahler;
 			productReference = 17780C2D2D3E1B1200022D35 /* Mahler.app */;
@@ -106,6 +115,7 @@
 			packageReferences = (
 				17CF23D42D3F253800E45B88 /* XCRemoteSwiftPackageReference "Auth0" */,
 				17CF23F42D3FCA3700E45B88 /* XCRemoteSwiftPackageReference "JWTDecode" */,
+				17CF240A2D40CEC500E45B88 /* XCRemoteSwiftPackageReference "grpc-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 17780C2E2D3E1B1200022D35 /* Products */;
@@ -357,6 +367,14 @@
 				minimumVersion = 3.2.0;
 			};
 		};
+		17CF240A2D40CEC500E45B88 /* XCRemoteSwiftPackageReference "grpc-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/grpc/grpc-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.24.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -369,6 +387,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 17CF23F42D3FCA3700E45B88 /* XCRemoteSwiftPackageReference "JWTDecode" */;
 			productName = JWTDecode;
+		};
+		17CF240B2D40CEC500E45B88 /* CGRPCZlib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17CF240A2D40CEC500E45B88 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = CGRPCZlib;
+		};
+		17CF240D2D40CEC500E45B88 /* GRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17CF240A2D40CEC500E45B88 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPC;
+		};
+		17CF240F2D40CEC500E45B88 /* GRPCReflectionService */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17CF240A2D40CEC500E45B88 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPCReflectionService;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
