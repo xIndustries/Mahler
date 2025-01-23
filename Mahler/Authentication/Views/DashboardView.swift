@@ -1,73 +1,88 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @EnvironmentObject var viewModel: AuthViewModel
+    @EnvironmentObject var viewModel: AuthViewModel  // ✅ Use global instance
     @State private var username: String = ""
     @State private var isEditingUsername = false
     @State private var isLoading = false
-
+    
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Dashboard")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding()
-            
-            Text("Welcome, \(viewModel.session?.email ?? "Guest")")
-                .font(.body)
-                .fontWeight(.semibold)
-                .padding()
+        VStack {
+            // Profile Picture
+            Image(systemName: "person.crop.circle.fill") // Placeholder Profile Pic
+                .resizable()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.gray)
+                .padding(.top, 20)
 
-            // ✅ Username Field & Update Functionality
-            if isEditingUsername {
-                TextField("Enter your username", text: $username)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal)
-
-                Button(action: saveUsername) {
-                    if isLoading {
-                        ProgressView()
-                    } else {
-                        Text("Save Username")
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .cornerRadius(8)
+            // User Information
+            VStack(spacing: 5) {
+                if isEditingUsername {
+                    TextField("Enter your username", text: $username)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                    
+                    Button(action: saveUsername) {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Text("Save Username")
+                                .font(.system(size: 14, weight: .bold))
+                                .frame(width: 120, height: 35)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
                     }
-                }
-                .padding(.horizontal)
-            } else {
-                Text("Username: \(username.isEmpty ? "Not Set" : username)")
-                    .font(.headline)
-                    .padding()
+                } else {
+                    Text(username.isEmpty ? "Not Set" : username)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 10)
 
+                    Text(viewModel.session?.email ?? "Guest")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding(.top, 10)
+
+            // Stats Section (Placeholder for now)
+            HStack(spacing: 40) {
+                ProfileStat(value: "12", label: "Posts")
+                ProfileStat(value: "230", label: "Followers")
+                ProfileStat(value: "180", label: "Following")
+            }
+            .padding(.top, 20)
+
+            // Edit Profile Button
+            if !isEditingUsername {
                 Button(action: { isEditingUsername = true }) {
-                    Text("Set Username")
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.green)
+                    Text("Edit Profile")
+                        .font(.system(size: 14, weight: .bold))
+                        .frame(width: 140, height: 35)
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.black)
                         .cornerRadius(8)
                 }
-                .padding(.horizontal)
+                .padding(.top, 10)
             }
 
-            Text("This is a protected view.")
-                .font(.subheadline)
-                .foregroundColor(.gray)
+            Spacer()
 
+            // Logout Button
             LogoutButton {
                 viewModel.logout()
             }
-            .padding(.top, 20)
+            .padding(.bottom, 20)
         }
         .padding()
         .onAppear {
             if !viewModel.hasAppeared {
                 fetchUsername()
                 print("🔹 Dashboard Loaded | User Email: \(viewModel.session?.email ?? "No email")")
-                viewModel.hasAppeared = true  // ✅ Prevent multiple logs
+                viewModel.hasAppeared = true
             }
         }
     }
@@ -109,6 +124,23 @@ struct DashboardView: View {
                     print("❌ Error updating username: \(error ?? "Unknown error")")
                 }
             }
+        }
+    }
+}
+
+// ✅ Component for Profile Stats
+struct ProfileStat: View {
+    var value: String
+    var label: String
+
+    var body: some View {
+        VStack {
+            Text(value)
+                .font(.headline)
+                .fontWeight(.bold)
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
         }
     }
 }
